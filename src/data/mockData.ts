@@ -963,3 +963,173 @@ export const MOCK_GOZ: GOZResponse = {
   themes: MOCK_GOZ_THEMES,
   summary: MOCK_GOZ_SUMMARY
 };
+import {
+  ProductionResponse, QCResponse, SupplierResponse,
+  TreasuryResponse, TenderResponse
+} from '../types';
+
+export const MOCK_PRODUCTION: ProductionResponse = {
+  shops: [
+    { id: 'SH-001', name: 'Цех механообработки №1', type: 'workshop', status: 'running', load_percent: 87, planned_load: 90, products: ['Корпуса БМП-3', 'Валы КПП'], current_order: 'РД-2026-0145', efficiency: 92, downtime_hours: 12, downtime_reason: null },
+    { id: 'SH-002', name: 'Цех сборки БМП-3', type: 'workshop', status: 'running', load_percent: 94, planned_load: 95, products: ['БМП-3 финальная сборка'], current_order: 'GOZ-001', efficiency: 88, downtime_hours: 4, downtime_reason: null },
+    { id: 'SH-003', name: 'Линия сварки корпусов', type: 'line', status: 'breakdown', load_percent: 0, planned_load: 85, products: ['Корпуса Т-90М'], current_order: null, efficiency: 0, downtime_hours: 48, downtime_reason: 'breakdown' },
+    { id: 'SH-004', name: 'Цех окраски', type: 'workshop', status: 'running', load_percent: 72, planned_load: 80, products: ['Окраска БТР-82А', 'Окраска Су-35С'], current_order: 'РД-2026-0401', efficiency: 95, downtime_hours: 0, downtime_reason: null },
+    { id: 'SH-005', name: 'Участок электроники', type: 'station', status: 'idle', load_percent: 15, planned_load: 70, products: ['БЦВМ', 'Радиостанции'], current_order: null, efficiency: 45, downtime_hours: 120, downtime_reason: 'no_materials' },
+    { id: 'SH-006', name: 'Цех литья', type: 'workshop', status: 'maintenance', load_percent: 0, planned_load: 60, products: ['Литьё алюминия'], current_order: null, efficiency: 0, downtime_hours: 72, downtime_reason: 'planned' },
+    { id: 'SH-007', name: 'Линия сборки Су-35С', type: 'line', status: 'running', load_percent: 91, planned_load: 90, products: ['Су-35С борт №1'], current_order: 'GOZ-004', efficiency: 94, downtime_hours: 8, downtime_reason: null },
+    { id: 'SH-008', name: 'Цех испытаний', type: 'workshop', status: 'running', load_percent: 68, planned_load: 75, products: ['Испытания двигателей'], current_order: 'РД-2026-0201', efficiency: 89, downtime_hours: 16, downtime_reason: null }
+  ],
+  material_needs: [
+    { id: 'MN-001', shop_id: 'SH-005', shop_name: 'Участок электроники', item_name: 'Процессор ЦОС ПЦ-187', ens_code: 'ENS-1001', quantity_needed: 50, quantity_in_stock: 12, shortage: 38, needed_date: '2026-11-15', linked_igk: '8503000000000000005', linked_contract: 'РД-2026-0601', priority: 'critical' },
+    { id: 'MN-002', shop_id: 'SH-003', shop_name: 'Линия сварки корпусов', item_name: 'Спецсталь 44С', ens_code: 'ENS-2018', quantity_needed: 200, quantity_in_stock: 0, shortage: 200, needed_date: '2026-11-10', linked_igk: '8503000000000000002', linked_contract: 'РД-2026-0202', priority: 'critical' },
+    { id: 'MN-003', shop_id: 'SH-001', shop_name: 'Цех механообработки №1', item_name: 'Титановые сплавы ВТ-20', ens_code: 'ENS-2024', quantity_needed: 80, quantity_in_stock: 45, shortage: 35, needed_date: '2026-11-20', linked_igk: '8503000000000000004', linked_contract: 'РД-2026-0403', priority: 'high' },
+    { id: 'MN-004', shop_id: 'SH-002', shop_name: 'Цех сборки БМП-3', item_name: 'Уплотнители резиновые', ens_code: 'ENS-3010', quantity_needed: 500, quantity_in_stock: 480, shortage: 20, needed_date: '2026-11-25', linked_igk: '8503000000000000001', linked_contract: 'РД-2026-0148', priority: 'medium' },
+    { id: 'MN-005', shop_id: 'SH-007', shop_name: 'Линия сборки Су-35С', item_name: 'Углепластик УУ-9', ens_code: 'ENS-2025', quantity_needed: 30, quantity_in_stock: 28, shortage: 2, needed_date: '2026-12-01', linked_igk: '8503000000000000004', linked_contract: 'РД-2026-0404', priority: 'low' }
+  ],
+  downtimes: [
+    { id: 'DT-001', shop_id: 'SH-003', shop_name: 'Линия сварки корпусов', start_time: '2026-11-02 08:00', end_time: null, duration_hours: 48, reason: 'breakdown', description: 'Поломка сварочного робота KUKA KR-100', loss_amount: 2400000, linked_igk: '8503000000000000002' },
+    { id: 'DT-002', shop_id: 'SH-005', shop_name: 'Участок электроники', start_time: '2026-10-25 10:00', end_time: null, duration_hours: 120, reason: 'no_materials', description: 'Отсутствие процессоров ЦОС', loss_amount: 5600000, linked_igk: '8503000000000000005' },
+    { id: 'DT-003', shop_id: 'SH-006', shop_name: 'Цех литья', start_time: '2026-11-01 06:00', end_time: '2026-11-04 06:00', duration_hours: 72, reason: 'planned', description: 'Плановое ТО печей', loss_amount: 0, linked_igk: null },
+    { id: 'DT-004', shop_id: 'SH-001', shop_name: 'Цех механообработки №1', start_time: '2026-10-28 14:00', end_time: '2026-10-29 02:00', duration_hours: 12, reason: 'no_tooling', description: 'Износ фрезерных головок', loss_amount: 180000, linked_igk: null }
+  ],
+  summary: {
+    total_shops: 8,
+    running_count: 5,
+    idle_count: 1,
+    breakdown_count: 1,
+    avg_load_percent: 65.9,
+    total_downtime_hours: 252,
+    total_loss_amount: 8180000,
+    critical_shortages: 2,
+    total_material_needs: 5
+  }
+};
+
+export const MOCK_QC: QCResponse = {
+  prescriptions: [
+    { id: 'VP-001', number: 'ПР-2026-0145', date: '2026-10-15', linked_igk: '8503000000000000001', linked_contract: 'РД-2026-0145', product: 'Двигатель УТД-32', description: 'Несоответствие маркировки на корпусе', severity: 'medium', status: 'resolved', deadline: '2026-10-25', responsible: 'Белов Д.С.', days_open: 10, resolution: 'Маркировка нанесена повторно' },
+    { id: 'VP-002', number: 'ПР-2026-0202', date: '2026-10-28', linked_igk: '8503000000000000002', linked_contract: 'РД-2026-0202', product: 'Корпус Т-90М', description: 'Отклонение геометрии сварного шва на 2.5 мм', severity: 'critical', status: 'in_progress', deadline: '2026-11-05', responsible: 'Морозова А.В.', days_open: 7, resolution: null },
+    { id: 'VP-003', number: 'ПР-2026-0401', date: '2026-11-01', linked_igk: '8503000000000000004', linked_contract: 'РД-2026-0401', product: 'БЦВМ БЦВМ-35', description: 'Неполный комплект документации', severity: 'high', status: 'open', deadline: '2026-11-10', responsible: 'Волков С.Н.', days_open: 3, resolution: null },
+    { id: 'VP-004', number: 'ПР-2026-0601', date: '2026-10-20', linked_igk: '8503000000000000005', linked_contract: 'РД-2026-0601', product: 'Р-187П1 Азарт', description: 'Превышение уровня шумов на 3 дБ', severity: 'high', status: 'rejected', deadline: '2026-10-30', responsible: 'Лебедев К.Р.', days_open: 15, resolution: 'Отклонено: в пределах ТУ' },
+    { id: 'VP-005', number: 'ПР-2026-0112', date: '2026-09-15', linked_igk: '8503000000000000006', linked_contract: 'РД-2025-0112', product: 'Оптический блок ОБ-113', description: 'Царапина на линзе', severity: 'medium', status: 'resolved', deadline: '2026-09-25', responsible: 'Кузнецов М.И.', days_open: 10, resolution: 'Линза заменена' }
+  ],
+  defects: [
+    { id: 'DF-001', date: '2026-10-15', stage: 'incoming', product: 'Двигатель УТД-32', defect_type: 'dimensional', supplier: 'ООО Двигатель-М', quantity: 2, amount: 1800000, description: 'Отклонение диаметра вала', action_taken: 'Возврат поставщику' },
+    { id: 'DF-002', date: '2026-10-22', stage: 'in_process', product: 'Корпус Т-90М', defect_type: 'assembly', supplier: 'ПАО Металлург', quantity: 1, amount: 4500000, description: 'Дефект сварного шва', action_taken: 'Переварка' },
+    { id: 'DF-003', date: '2026-10-28', stage: 'final', product: 'БЦВМ БЦВМ-35', defect_type: 'functional', supplier: 'АО Концерн Созвездие', quantity: 3, amount: 5400000, description: 'Сбой при тестировании', action_taken: 'Доработка ПО' },
+    { id: 'DF-004', date: '2026-11-01', stage: 'incoming', product: 'Оптическое стекло', defect_type: 'material', supplier: 'ПАО Красный Октябрь', quantity: 5, amount: 425000, description: 'Помутнение материала', action_taken: 'Замена партии' }
+  ],
+  funnel: [
+    { stage: 'incoming', stage_name: 'Входной контроль', count: 145, rejected: 8, returned: 5 },
+    { stage: 'in_process', stage_name: 'Операционный контроль', count: 98, rejected: 3, returned: 2 },
+    { stage: 'final', stage_name: 'Приёмочный контроль', count: 52, rejected: 2, returned: 1 },
+    { stage: 'vp_acceptance', stage_name: 'Приёмка ВП', count: 38, rejected: 1, returned: 1 },
+    { stage: 'customer_acceptance', stage_name: 'Приёмка заказчиком', count: 24, rejected: 0, returned: 0 }
+  ],
+  summary: {
+    open_prescriptions: 2,
+    critical_prescriptions: 1,
+    total_defects: 4,
+    defect_rate_percent: 2.8,
+    avg_resolution_days: 8.5,
+    total_defect_amount: 12125000,
+    acceptance_pass_rate: 96.2
+  }
+};
+
+export const MOCK_SUPPLIERS: SupplierResponse = {
+  suppliers: [
+    { id: 'SUP-001', name: 'ООО Двигатель-М', inn: '7712345678', region: 'Москва', is_sole: true, is_sanctioned: false, rating: 'A', risk: 'low', total_contracts: 8, total_amount: 144000000, on_time_percent: 95, quality_percent: 98, price_index: 1.05, reliability_score: 92, incidents_count: 1, last_incident_date: '2026-06-15', certifications: ['ISO 9001', 'ГОСТ РВ'], products: ['Двигатели УТД-32', 'Двигатели АЛ-41Ф1'] },
+    { id: 'SUP-002', name: 'АО Оптика-Прибор', inn: '7723456789', region: 'Красногорск', is_sole: false, is_sanctioned: false, rating: 'A', risk: 'low', total_contracts: 5, total_amount: 60000000, on_time_percent: 92, quality_percent: 96, price_index: 1.02, reliability_score: 89, incidents_count: 0, last_incident_date: null, certifications: ['ISO 9001'], products: ['Прицельные комплексы'] },
+    { id: 'SUP-003', name: 'ПАО Металлург', inn: '6634567890', region: 'Екатеринбург', is_sole: false, is_sanctioned: false, rating: 'B', risk: 'medium', total_contracts: 12, total_amount: 85000000, on_time_percent: 78, quality_percent: 88, price_index: 0.95, reliability_score: 72, incidents_count: 4, last_incident_date: '2026-10-22', certifications: ['ISO 9001'], products: ['Броневая сталь', 'Металлоконструкции'] },
+    { id: 'SUP-004', name: 'ПАО ВСМПО-АВИСМА', inn: '6645678901', region: 'Верхняя Салда', is_sole: true, is_sanctioned: true, rating: 'C', risk: 'high', total_contracts: 3, total_amount: 64000000, on_time_percent: 65, quality_percent: 92, price_index: 1.15, reliability_score: 58, incidents_count: 3, last_incident_date: '2026-09-10', certifications: ['ISO 9001', 'AS9100'], products: ['Титановые сплавы'] },
+    { id: 'SUP-005', name: 'АО Концерн Созвездие', inn: '3656789012', region: 'Воронеж', is_sole: true, is_sanctioned: false, rating: 'A', risk: 'medium', total_contracts: 4, total_amount: 72000000, on_time_percent: 88, quality_percent: 94, price_index: 1.08, reliability_score: 85, incidents_count: 2, last_incident_date: '2026-10-28', certifications: ['ISO 9001', 'ГОСТ РВ'], products: ['Процессоры ЦОС', 'Радиостанции'] },
+    { id: 'SUP-006', name: 'ООО Композит-Авиа', inn: '7767890123', region: 'Москва', is_sole: false, is_sanctioned: false, rating: 'B', risk: 'low', total_contracts: 3, total_amount: 36000000, on_time_percent: 90, quality_percent: 91, price_index: 1.1, reliability_score: 82, incidents_count: 1, last_incident_date: '2026-08-05', certifications: ['ISO 9001'], products: ['Углепластик'] },
+    { id: 'SUP-007', name: 'ПАО КАМАЗ', inn: '1678901234', region: 'Набережные Челны', is_sole: false, is_sanctioned: false, rating: 'A', risk: 'low', total_contracts: 2, total_amount: 45000000, on_time_percent: 96, quality_percent: 97, price_index: 1.0, reliability_score: 94, incidents_count: 0, last_incident_date: null, certifications: ['ISO 9001', 'IATF 16949'], products: ['Двигатели КамАЗ'] },
+    { id: 'SUP-008', name: 'АО МедТехника', inn: '7789012345', region: 'Зеленоград', is_sole: false, is_sanctioned: false, rating: 'A', risk: 'low', total_contracts: 2, total_amount: 30000000, on_time_percent: 94, quality_percent: 99, price_index: 1.03, reliability_score: 91, incidents_count: 0, last_incident_date: null, certifications: ['ISO 13485', 'ГОСТ РВ'], products: ['Диагностическое оборудование'] }
+  ],
+  dependencies: [
+    { igk_code: '8503000000000000001', igk_subject: 'БМП-3 Модернизация', critical_suppliers: ['SUP-001', 'SUP-002'], sole_source_risk: true, alternative_suppliers: ['SUP-009'] },
+    { igk_code: '8503000000000000002', igk_subject: 'Т-90М Прорыв', critical_suppliers: ['SUP-003'], sole_source_risk: true, alternative_suppliers: [] },
+    { igk_code: '8503000000000000004', igk_subject: 'Су-35С', critical_suppliers: ['SUP-001', 'SUP-004', 'SUP-006'], sole_source_risk: true, alternative_suppliers: ['SUP-010'] },
+    { igk_code: '8503000000000000005', igk_subject: 'Р-187П1 Азарт', critical_suppliers: ['SUP-005'], sole_source_risk: true, alternative_suppliers: [] }
+  ],
+  summary: {
+    total_suppliers: 8,
+    sole_source_count: 4,
+    sanctioned_count: 1,
+    avg_rating_score: 82.9,
+    high_risk_count: 1,
+    total_incidents: 11,
+    top_suppliers_count: 3
+  }
+};
+
+export const MOCK_TREASURY: TreasuryResponse = {
+  obs_accounts: [
+    { igk_code: '8503000000000000001', contract_number: '2026-ГОЗ-001', bank_name: 'ПАО Сбербанк', account_number: '40602810100000099999', balance: 28800000, limit_amount: 120000000, limit_used_percent: 45, status: 'normal', last_transaction_date: '2026-11-01', risks: [] },
+    { igk_code: '8503000000000000002', contract_number: '2026-ГОЗ-003', bank_name: 'ПАО Сбербанк', account_number: '40602810100000099998', balance: 0, limit_amount: 250000000, limit_used_percent: 0, status: 'warning', last_transaction_date: '2026-10-15', risks: ['Аванс не поступил'] },
+    { igk_code: '8503000000000000003', contract_number: '2026-ГОЗ-007', bank_name: 'ПАО Сбербанк', account_number: '40602810100000099997', balance: 70750000, limit_amount: 85000000, limit_used_percent: 100, status: 'normal', last_transaction_date: '2026-10-28', risks: [] },
+    { igk_code: '8503000000000000004', contract_number: '2026-ГОЗ-012', bank_name: 'ПАО Сбербанк', account_number: '40602810100000099996', balance: 34550000, limit_amount: 180000000, limit_used_percent: 55, status: 'normal', last_transaction_date: '2026-11-02', risks: [] },
+    { igk_code: '8503000000000000005', contract_number: '2026-ГОЗ-018', bank_name: 'ПАО Сбербанк', account_number: '40602810100000099995', balance: 12700000, limit_amount: 95000000, limit_used_percent: 35, status: 'warning', last_transaction_date: '2026-11-01', risks: ['Превышение лимита по статье "Зарплата"'] },
+    { igk_code: '8503000000000000006', contract_number: '2026-ГОЗ-025', bank_name: 'ПАО Сбербанк', account_number: '40602810100000099994', balance: 23300000, limit_amount: 65000000, limit_used_percent: 100, status: 'audit', last_transaction_date: '2026-10-30', risks: ['Плановая проверка Казначейства'] }
+  ],
+  reports: [
+    { id: 'TR-001', period: 'Октябрь 2026', type: 'monthly', status: 'accepted', sent_date: '2026-11-05', accepted_date: '2026-11-07', rejection_reason: null, igk_count: 6, total_amount: 795000000 },
+    { id: 'TR-002', period: 'Q3 2026', type: 'quarterly', status: 'accepted', sent_date: '2026-10-10', accepted_date: '2026-10-15', rejection_reason: null, igk_count: 6, total_amount: 795000000 },
+    { id: 'TR-003', period: 'Ноябрь 2026', type: 'monthly', status: 'sent', sent_date: '2026-11-05', accepted_date: null, rejection_reason: null, igk_count: 6, total_amount: 795000000 },
+    { id: 'TR-004', period: 'Сентябрь 2026', type: 'monthly', status: 'rejected', sent_date: '2026-10-05', accepted_date: null, rejection_reason: 'Расхождения по ИГК ...002', igk_count: 6, total_amount: 795000000 }
+  ],
+  penalties: [
+    { id: 'PN-001', date: '2026-09-15', type: 'customer', linked_igk: '8503000000000000002', description: 'Пени за просрочку поставки Т-90М', amount: 2500000, status: 'accrued' },
+    { id: 'PN-002', date: '2026-08-20', type: 'treasury', linked_igk: '8503000000000000005', description: 'Штраф за нецелевое использование ОБС', amount: 500000, status: 'paid' },
+    { id: 'PN-003', date: '2026-10-10', type: 'contractor', linked_igk: '8503000000000000004', description: 'Пени от поставщика за задержку оплаты', amount: 180000, status: 'disputed' }
+  ],
+  summary: {
+    total_obs_balance: 170100000,
+    total_limit: 795000000,
+    limit_usage_percent: 55.8,
+    blocked_accounts: 0,
+    overdue_reports: 0,
+    accepted_reports: 2,
+    total_penalties: 3180000,
+    paid_penalties: 500000,
+    disputed_penalties: 180000
+  }
+};
+
+export const MOCK_TENDERS: TenderResponse = {
+  tenders: [
+    { id: 'TN-001', number: 'Т-2026-001', title: 'Поставка двигателей для БМП-3 (партия 2027)', type: 'open', stage: 'rfp_sent', planned_amount: 180000000, final_amount: null, savings_amount: 0, savings_percent: null, participants_count: 4, winner: null, created_date: '2026-10-01', deadline: '2026-12-15', signed_date: null, linked_igk: null, responsible: 'Волков С.Н.', risks: ['Высокая конкуренция'] },
+    { id: 'TN-002', number: 'Т-2026-002', title: 'Закупка титановых сплавов ВТ-20', type: 'closed', stage: 'negotiation', planned_amount: 96000000, final_amount: null, savings_amount: 0, savings_percent: null, participants_count: 2, winner: null, created_date: '2026-10-15', deadline: '2026-11-30', signed_date: null, linked_igk: '8503000000000000004', responsible: 'Морозова А.В.', risks: ['Ограниченное число поставщиков'] },
+    { id: 'TN-003', number: 'Т-2026-003', title: 'Разработка ПО для БЦВМ', type: 'closed', stage: 'contract_signed', planned_amount: 45000000, final_amount: 42000000, savings_amount: 3000000, savings_percent: 6.7, participants_count: 3, winner: 'ООО СофтРазработка', created_date: '2026-09-01', deadline: '2026-10-30', signed_date: '2026-11-01', linked_igk: '8503000000000000004', responsible: 'Лебедев К.Р.', risks: [] },
+    { id: 'TN-004', number: 'Т-2026-004', title: 'Поставка оптических блоков', type: 'open', stage: 'market_research', planned_amount: 75000000, final_amount: null, savings_amount: 0, savings_percent: null, participants_count: 0, winner: null, created_date: '2026-11-01', deadline: '2027-01-15', signed_date: null, linked_igk: null, responsible: 'Волков С.Н.', risks: [] },
+    { id: 'TN-005', number: 'Т-2026-005', title: 'Логистические услуги 2027', type: 'framework', stage: 'planning', planned_amount: 120000000, final_amount: null, savings_amount: 0, savings_percent: null, participants_count: 0, winner: null, created_date: '2026-11-01', deadline: '2027-02-01', signed_date: null, linked_igk: null, responsible: 'Новикова Е.А.', risks: ['Рост тарифов ТК'] },
+    { id: 'TN-006', number: 'Т-2026-006', title: 'Закупка серверного оборудования', type: 'open', stage: 'cancelled', planned_amount: 24000000, final_amount: null, savings_amount: 0, savings_percent: null, participants_count: 5, winner: null, created_date: '2026-08-15', deadline: '2026-10-01', signed_date: null, linked_igk: null, responsible: 'Павлов Р.А.', risks: ['Санкционные ограничения'] }
+  ],
+  price_trends: [
+    { category: 'Титановые сплавы', periods: [{ period: 'Июл', price: 3200000, change_percent: 0 }, { period: 'Авг', price: 3350000, change_percent: 4.7 }, { period: 'Сен', price: 3500000, change_percent: 4.5 }, { period: 'Окт', price: 3680000, change_percent: 5.1 }, { period: 'Ноя', price: 3850000, change_percent: 4.6 }] },
+    { category: 'Электроника', periods: [{ period: 'Июл', price: 180000, change_percent: 0 }, { period: 'Авг', price: 185000, change_percent: 2.8 }, { period: 'Сен', price: 192000, change_percent: 3.8 }, { period: 'Окт', price: 198000, change_percent: 3.1 }, { period: 'Ноя', price: 205000, change_percent: 3.5 }] },
+    { category: 'Броневая сталь', periods: [{ period: 'Июл', price: 85000, change_percent: 0 }, { period: 'Авг', price: 87000, change_percent: 2.4 }, { period: 'Сен', price: 86500, change_percent: -0.6 }, { period: 'Окт', price: 88000, change_percent: 1.7 }, { period: 'Ноя', price: 89500, change_percent: 1.7 }] }
+  ],
+  budget_forecast: {
+    year: 2027,
+    planned: 1250000000,
+    actual: null,
+    by_quarter: [
+      { quarter: 'Q1 2027', planned: 280000000, actual: null },
+      { quarter: 'Q2 2027', planned: 320000000, actual: null },
+      { quarter: 'Q3 2027', planned: 350000000, actual: null },
+      { quarter: 'Q4 2027', planned: 300000000, actual: null }
+    ]
+  },
+  summary: {
+    active_tenders: 4,
+    total_planned_amount: 540000000,
+    total_savings: 3000000,
+    avg_savings_percent: 6.7,
+    completed_tenders: 1,
+    cancelled_tenders: 1,
+    next_year_forecast: 1250000000
+  }
+};

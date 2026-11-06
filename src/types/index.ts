@@ -565,3 +565,281 @@ export interface GOZResponse {
   themes: GOZThemeSummary[];
   summary: GOZSummary;
 }
+// ==================== ПРОИЗВОДСТВЕННЫЙ КОНТУР ====================
+
+export type ShopStatus = 'idle' | 'running' | 'maintenance' | 'breakdown';
+export type DowntimeReason = 'no_materials' | 'no_tooling' | 'breakdown' | 'planned' | 'other';
+
+export interface ShopUnit {
+  id: string;
+  name: string;
+  type: 'workshop' | 'line' | 'station';
+  status: ShopStatus;
+  load_percent: number;
+  planned_load: number;
+  products: string[];
+  current_order: string | null;
+  efficiency: number;
+  downtime_hours: number;
+  downtime_reason: DowntimeReason | null;
+}
+
+export interface MaterialNeed {
+  id: string;
+  shop_id: string;
+  shop_name: string;
+  item_name: string;
+  ens_code: string;
+  quantity_needed: number;
+  quantity_in_stock: number;
+  shortage: number;
+  needed_date: string;
+  linked_igk: string;
+  linked_contract: string;
+  priority: 'critical' | 'high' | 'medium' | 'low';
+}
+
+export interface DowntimeEvent {
+  id: string;
+  shop_id: string;
+  shop_name: string;
+  start_time: string;
+  end_time: string | null;
+  duration_hours: number;
+  reason: DowntimeReason;
+  description: string;
+  loss_amount: number;
+  linked_igk: string | null;
+}
+
+export interface ProductionResponse {
+  shops: ShopUnit[];
+  material_needs: MaterialNeed[];
+  downtimes: DowntimeEvent[];
+  summary: {
+    total_shops: number;
+    running_count: number;
+    idle_count: number;
+    breakdown_count: number;
+    avg_load_percent: number;
+    total_downtime_hours: number;
+    total_loss_amount: number;
+    critical_shortages: number;
+    total_material_needs: number;
+  };
+}
+
+// ==================== ВОЕННАЯ ПРИЁМКА И ОТК ====================
+
+export type VPStatus = 'open' | 'in_progress' | 'resolved' | 'rejected' | 'escalated';
+export type QCStage = 'incoming' | 'in_process' | 'final' | 'vp_acceptance' | 'customer_acceptance';
+export type DefectType = 'dimensional' | 'material' | 'assembly' | 'documentation' | 'functional';
+
+export interface VPPrescription {
+  id: string;
+  number: string;
+  date: string;
+  linked_igk: string;
+  linked_contract: string;
+  product: string;
+  description: string;
+  severity: 'critical' | 'high' | 'medium' | 'low';
+  status: VPStatus;
+  deadline: string;
+  responsible: string;
+  days_open: number;
+  resolution: string | null;
+}
+
+export interface QCDefect {
+  id: string;
+  date: string;
+  stage: QCStage;
+  product: string;
+  defect_type: DefectType;
+  supplier: string;
+  quantity: number;
+  amount: number;
+  description: string;
+  action_taken: string;
+}
+
+export interface AcceptanceFunnel {
+  stage: QCStage;
+  stage_name: string;
+  count: number;
+  rejected: number;
+  returned: number;
+}
+
+export interface QCResponse {
+  prescriptions: VPPrescription[];
+  defects: QCDefect[];
+  funnel: AcceptanceFunnel[];
+  summary: {
+    open_prescriptions: number;
+    critical_prescriptions: number;
+    total_defects: number;
+    defect_rate_percent: number;
+    avg_resolution_days: number;
+    total_defect_amount: number;
+    acceptance_pass_rate: number;
+  };
+}
+
+// ==================== УПРАВЛЕНИЕ КООПЕРАЦИЕЙ ====================
+
+export type SupplierRating = 'A' | 'B' | 'C' | 'D';
+export type SupplierRisk = 'low' | 'medium' | 'high' | 'critical';
+
+export interface Supplier {
+  id: string;
+  name: string;
+  inn: string;
+  region: string;
+  is_sole: boolean;
+  is_sanctioned: boolean;
+  rating: SupplierRating;
+  risk: SupplierRisk;
+  total_contracts: number;
+  total_amount: number;
+  on_time_percent: number;
+  quality_percent: number;
+  price_index: number;
+  reliability_score: number;
+  incidents_count: number;
+  last_incident_date: string | null;
+  certifications: string[];
+  products: string[];
+}
+
+export interface SupplierDependency {
+  igk_code: string;
+  igk_subject: string;
+  critical_suppliers: string[];
+  sole_source_risk: boolean;
+  alternative_suppliers: string[];
+}
+
+export interface SupplierResponse {
+  suppliers: Supplier[];
+  dependencies: SupplierDependency[];
+  summary: {
+    total_suppliers: number;
+    sole_source_count: number;
+    sanctioned_count: number;
+    avg_rating_score: number;
+    high_risk_count: number;
+    total_incidents: number;
+    top_suppliers_count: number;
+  };
+}
+
+// ==================== КАЗНАЧЕЙСТВО И ОБС ====================
+
+export type OBSStatus = 'normal' | 'warning' | 'blocked' | 'audit';
+export type ReportStatus = 'draft' | 'sent' | 'accepted' | 'rejected' | 'overdue';
+
+export interface OBSAccount {
+  igk_code: string;
+  contract_number: string;
+  bank_name: string;
+  account_number: string;
+  balance: number;
+  limit_amount: number;
+  limit_used_percent: number;
+  status: OBSStatus;
+  last_transaction_date: string;
+  risks: string[];
+}
+
+export interface TreasuryReport {
+  id: string;
+  period: string;
+  type: 'monthly' | 'quarterly' | 'annual';
+  status: ReportStatus;
+  sent_date: string | null;
+  accepted_date: string | null;
+  rejection_reason: string | null;
+  igk_count: number;
+  total_amount: number;
+}
+
+export interface Penalty {
+  id: string;
+  date: string;
+  type: 'customer' | 'treasury' | 'contractor';
+  linked_igk: string | null;
+  description: string;
+  amount: number;
+  status: 'accrued' | 'paid' | 'disputed' | 'cancelled';
+}
+
+export interface TreasuryResponse {
+  obs_accounts: OBSAccount[];
+  reports: TreasuryReport[];
+  penalties: Penalty[];
+  summary: {
+    total_obs_balance: number;
+    total_limit: number;
+    limit_usage_percent: number;
+    blocked_accounts: number;
+    overdue_reports: number;
+    accepted_reports: number;
+    total_penalties: number;
+    paid_penalties: number;
+    disputed_penalties: number;
+  };
+}
+
+// ==================== ТЕНДЕРНЫЙ ПОРТФЕЛЬ ====================
+
+export type TenderStage = 'planning' | 'market_research' | 'rfp_sent' | 'negotiation' | 'contract_signed' | 'cancelled';
+export type TenderType = 'open' | 'closed' | 'single_source' | 'framework';
+
+export interface Tender {
+  id: string;
+  number: string;
+  title: string;
+  type: TenderType;
+  stage: TenderStage;
+  planned_amount: number;
+  final_amount: number | null;
+  savings_amount: number;
+  savings_percent: number | null;
+  participants_count: number;
+  winner: string | null;
+  created_date: string;
+  deadline: string;
+  signed_date: string | null;
+  linked_igk: string | null;
+  responsible: string;
+  risks: string[];
+}
+
+export interface PriceTrend {
+  category: string;
+  periods: Array<{ period: string; price: number; change_percent: number }>;
+}
+
+export interface BudgetForecast {
+  year: number;
+  planned: number;
+  actual: number | null;
+  by_quarter: Array<{ quarter: string; planned: number; actual: number | null }>;
+}
+
+export interface TenderResponse {
+  tenders: Tender[];
+  price_trends: PriceTrend[];
+  budget_forecast: BudgetForecast;
+  summary: {
+    active_tenders: number;
+    total_planned_amount: number;
+    total_savings: number;
+    avg_savings_percent: number;
+    completed_tenders: number;
+    cancelled_tenders: number;
+    next_year_forecast: number;
+  };
+}
